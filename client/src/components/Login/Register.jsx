@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
 import "./styles.css";
 import axios from "axios";
+import { env } from "../../services/config";
+
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -33,7 +35,7 @@ function Register() {
       } else if (password !== retypePassword) {
         setError("Passwords are not identical.");
       } else {
-        await axios.post(`${import.meta.env.VITE_CLIENT_PORT}/user/register`, {
+        await axios.post(`${env.VITE_API_ENDPOINT}/user/register`, {
           login_name: username,
           password: password,
           first_name: firstName,

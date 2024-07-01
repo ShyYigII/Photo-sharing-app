@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TextField, Button, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import "./styles.css";
-
+import { env } from "../../services/config";
 import axios from "axios";
 function Login({ login }) {
   const [username, setUsername] = useState("");
@@ -13,13 +13,10 @@ function Login({ login }) {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/login`,
-        {
-          login_name: username,
-          password: password,
-        }
-      );
+      const res = await axios.post(`${env.VITE_API_ENDPOINT}/user/login`, {
+        login_name: username,
+        password: password,
+      });
 
       const { token, user } = await res.data;
 

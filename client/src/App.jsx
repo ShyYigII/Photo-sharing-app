@@ -8,6 +8,7 @@ import UserDetail from "./components/UserDetail";
 import UserList from "./components/UserList/index";
 import UserPhotos from "./components/UserPhotos";
 import LoginRegister from "./components/Login/LoginRegister";
+import { env } from "./services/config";
 
 import axios from "axios";
 
@@ -27,10 +28,8 @@ const App = () => {
 
   const login = async (u, tk) => {
     try {
-      console.log(import.meta.env.VITE_CLIENT_PORT);
-      const res = await axios.get(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/${u._id}`
-      );
+      console.log(env.VITE_API_ENDPOINT);
+      const res = await axios.get(`${env.VITE_API_ENDPOINT}/user/${u._id}`);
 
       setLogin(true);
       setUserId(res.data._id);

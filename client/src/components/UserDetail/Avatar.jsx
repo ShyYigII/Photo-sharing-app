@@ -14,6 +14,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
+import { env } from "../../services/config";
 
 const Avatar = ({ idOfMe, token }) => {
   const [file, setFile] = useState(null);
@@ -38,7 +39,7 @@ const Avatar = ({ idOfMe, token }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/uploadavatar/${idOfMe}`,
+        `${env.VITE_API_ENDPOINT}/user/uploadavatar/${idOfMe}`,
         formData,
         {
           headers: {
@@ -89,7 +90,7 @@ const Avatar = ({ idOfMe, token }) => {
     };
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/avatarOfUser/${userId}`,
+        `${env.VITE_API_ENDPOINT}/user/avatarOfUser/${userId}`,
         config
       );
       console.log("res", res);

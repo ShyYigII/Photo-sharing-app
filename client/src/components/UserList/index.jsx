@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
+import { env } from "../../services/config";
 
 function UserList({ isLogin, token }) {
   const [users, setUsers] = useState([]);
@@ -22,10 +23,7 @@ function UserList({ isLogin, token }) {
       },
     };
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/list`,
-        config
-      );
+      const res = await axios.get(`${env.VITE_API_ENDPOINT}/user/list`, config);
 
       setUsers(res.data);
     } catch (e) {

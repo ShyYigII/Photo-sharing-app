@@ -12,6 +12,7 @@ import {
   DialogActions,
   DialogContentText,
   CircularProgress,
+  Tooltip,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -21,6 +22,7 @@ import "./styles.css";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PropTypes from "prop-types";
+import { env } from "../../services/config";
 
 function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
   const [file, setFile] = useState(null);
@@ -39,7 +41,7 @@ function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/logout`,
+        `${env.VITE_API_ENDPOINT}/user/logout`,
         {
           user: user,
         },
@@ -65,7 +67,7 @@ function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/uploadimage`,
+        `${env.VITE_API_ENDPOINT}/user/uploadimage`,
         formData,
         {
           headers: {
@@ -127,30 +129,36 @@ function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
           </Typography>
           {isLogin && (
             <div className="logout" style={{ position: "absolute", right: 10 }}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleOpenChoosePhoto}
-              >
-                <AddAPhotoIcon />
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleGoHomePage}
-                style={{ marginLeft: 10 }}
-              >
-                <AccountCircleOutlinedIcon />
-              </Button>
-              {isLogin && (
+              <Tooltip title="Upload Photo">
                 <Button
-                  style={{ marginLeft: 10 }}
                   variant="contained"
-                  type="submit"
-                  onClick={handleLogout}
+                  color="primary"
+                  onClick={handleOpenChoosePhoto}
                 >
-                  <LogoutIcon />
+                  <AddAPhotoIcon />
                 </Button>
+              </Tooltip>
+              <Tooltip title="Go home page">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleGoHomePage}
+                  style={{ marginLeft: 10 }}
+                >
+                  <AccountCircleOutlinedIcon />
+                </Button>
+              </Tooltip>
+              {isLogin && (
+                <Tooltip title="Logout">
+                  <Button
+                    style={{ marginLeft: 10 }}
+                    variant="contained"
+                    type="submit"
+                    onClick={handleLogout}
+                  >
+                    <LogoutIcon />
+                  </Button>
+                </Tooltip>
               )}
             </div>
           )}

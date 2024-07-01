@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import Avatar from "./Avatar";
 import PropTypes from "prop-types";
+import { env } from "../../services/config";
 
 function UserDetail({ token, idOfMe }) {
   const { userId } = useParams();
@@ -13,7 +14,7 @@ function UserDetail({ token, idOfMe }) {
 
   const getData = async () => {
     try {
-      const url = `${import.meta.env.VITE_CLIENT_PORT}/user/${userId}`;
+      const url = `${env.VITE_API_ENDPOINT}/user/${userId}`;
       const res = await axios.get(url);
       setUser(res.data);
       {

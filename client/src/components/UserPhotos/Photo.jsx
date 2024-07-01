@@ -9,6 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import PropTypes from "prop-types";
+import { env } from "../../services/config";
 
 import DeleteOutlineSharpIcon from "@mui/icons-material/DeleteOutlineSharp";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -32,7 +33,7 @@ function Photo({ photos, users, userIdMe, handleUpdatePhotos, code, token }) {
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/deleteimage/${photos._id}`,
+        `${env.VITE_API_ENDPOINT}/user/deleteimage/${photos._id}`,
         config
       );
       handleUpdatePhotos();
@@ -54,9 +55,7 @@ function Photo({ photos, users, userIdMe, handleUpdatePhotos, code, token }) {
     try {
       setError("");
       await axios.post(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/commentsOfPhoto/${
-          photos._id
-        }`,
+        `${env.VITE_API_ENDPOINT}/user/commentsOfPhoto/${photos._id}`,
         {
           comment: comment,
           user_id: userIdMe,

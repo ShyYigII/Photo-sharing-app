@@ -5,6 +5,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { Typography, List, Button, CircularProgress, Box } from "@mui/material";
 import Photo from "./Photo";
+import { env } from "../../services/config";
 
 function UserPhotos({ userIdMe, isGetDataPhoto, setGetDataPhoto, token }) {
   const { userId } = useParams();
@@ -19,10 +20,7 @@ function UserPhotos({ userIdMe, isGetDataPhoto, setGetDataPhoto, token }) {
       },
     };
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/list`,
-        config
-      );
+      const res = await axios.get(`${env.VITE_API_ENDPOINT}/user/list`, config);
       console.log(res.data);
       setUsers(res.data);
     } catch (e) {
@@ -39,7 +37,7 @@ function UserPhotos({ userIdMe, isGetDataPhoto, setGetDataPhoto, token }) {
     };
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/photosOfUser/${userId}`,
+        `${env.VITE_API_ENDPOINT}/user/photosOfUser/${userId}`,
         config
       );
       setPhotos(res.data);
