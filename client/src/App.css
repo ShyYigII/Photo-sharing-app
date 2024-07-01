@@ -1,0 +1,16 @@
+.main-topbar-buffer {
+  margin-top: 70px;
+}
+
+.main-grid-item {
+  height: calc(100vh - 90px);
+  padding: 10px;
+}
+
+.scrollable {
+  position: relative;
+  overflow-y: auto;
+  max-height: 100vh; 
+}
+
+

@@ -1,0 +1,10 @@
+.login-form {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: 80%
+}
+
+.registerButton{
+	width: 80%
+}

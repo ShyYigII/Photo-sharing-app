@@ -1,0 +1,18 @@
+.comment {
+	display: block;
+  }
+
+
+  .delete-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    cursor: pointer;
+    font-size: 30px;
+    color: inherit; /* Màu mặc định */
+    transition: color 0.3s; /* Hiệu ứng chuyển đổi màu trong 0.3s */
+}
+.delete-icon:hover {
+  color: white; /* Thay đổi màu khi hover */
+}
