@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Button, Card, Typography } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "./styles.css";
 import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
-function UserDetail() {
+import Avatar from "./Avatar";
+import PropTypes from "prop-types";
+
+function UserDetail({ token, idOfMe }) {
   const { userId } = useParams();
   const [user, setUser] = useState();
 
@@ -39,7 +41,7 @@ function UserDetail() {
             paddingBottom: "20px",
           }}
         >
-          <AccountCircleIcon sx={{ fontSize: "150px" }} />
+          <Avatar token={token} idOfMe={idOfMe} />
 
           <Typography
             variant="h6"
@@ -83,3 +85,8 @@ function UserDetail() {
 }
 
 export default UserDetail;
+
+UserDetail.propTypes = {
+  token: PropTypes.string,
+  idOfMe: PropTypes.string,
+};

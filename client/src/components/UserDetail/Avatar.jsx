@@ -1,70 +1,44 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import CloudUpload from "@mui/icons-material/CloudUpload";
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Dialog,
-  DialogTitle,
   Box,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
+  Button,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Tooltip,
 } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import "./styles.css";
 import axios from "axios";
-import LogoutIcon from "@mui/icons-material/Logout";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useParams } from "react-router-dom";
 
-function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
+const Avatar = ({ idOfMe, token }) => {
   const [file, setFile] = useState(null);
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const nav = useNavigate();
-  const handleLogout = async (e) => {
-    e.preventDefault();
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    setLoading(true);
 
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/logout`,
-        {
-          user: user,
-        },
-        config
-      );
-      setLoading(false);
-      logout();
-    } catch (err) {
-      console.log(err.response.data);
-    }
-  };
+  const { userId } = useParams();
 
-  const handleUpload = async (e) => {
+  const [avatar, setAvatar] = useState(null);
+
+  const handleChangeAvatar = async (e) => {
     e.preventDefault();
     if (!file) {
       console.log("Please select a file");
       return;
     }
+
     const formData = new FormData();
     formData.append("myImage", file);
     formData.append("user_id", idOfMe);
     setLoading(true);
-
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_CLIENT_PORT}/user/uploadimage`,
+        `${import.meta.env.VITE_CLIENT_PORT}/user/uploadavatar/${idOfMe}`,
         formData,
         {
           headers: {
@@ -74,15 +48,14 @@ function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
         }
       );
       console.log(response.data);
-      setGetDataPhoto(true);
       setLoading(false);
       handleClose();
-      nav(`/photos/${idOfMe}`);
+      getData();
     } catch (error) {
       console.error("Error uploading image:", error);
+      setLoading(false);
     }
   };
-
   const handleClose = () => {
     setOpen(false);
     setFile(null);
@@ -92,9 +65,12 @@ function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
     setOpen(true);
   };
 
-  const handleGoHomePage = () => {
-    nav(`/users/${user._id}`);
-  };
+  useEffect(() => {
+    if (file) setUrl(URL.createObjectURL(file));
+    else {
+      setUrl("");
+    }
+  }, [file]);
 
   const handleFileChange = (event) => {
     const fileSelected = event.target.files[0];
@@ -104,60 +80,93 @@ function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
     }
   };
 
-  useEffect(() => {
-    if (file) setUrl(URL.createObjectURL(file));
-    else {
-      setUrl("");
-    }
-  }, [file]);
+  const getData = async () => {
+    setLoading(true);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_CLIENT_PORT}/user/avatarOfUser/${userId}`,
+        config
+      );
+      console.log("res", res);
+      setLoading(false);
 
+      setAvatar(res.data);
+    } catch (e) {
+      console.log("Error: ", e);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [userId]);
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          height: "300px",
+          width: "290px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          paddingBottom: "20px",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <>
-      <AppBar className="topbar-appBar">
-        <Toolbar className="toolbar">
-          <Typography variant="h4" color="inherit">
-            {isLogin ? (
-              <Button sx={{ color: "white" }} onClick={handleGoHomePage}>
-                <HomeIcon sx={{ fontSize: "50px" }} />
-              </Button>
-            ) : (
-              "You are not logged in"
-            )}
-          </Typography>
-          {isLogin && (
-            <div className="logout" style={{ position: "absolute", right: 10 }}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleOpenChoosePhoto}
-              >
-                <AddAPhotoIcon />
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleGoHomePage}
-                style={{ marginLeft: 10 }}
-              >
-                My page{" "}
-              </Button>
-              {isLogin && (
-                <Button
-                  style={{ marginLeft: 10 }}
-                  variant="contained"
-                  type="submit"
-                  onClick={handleLogout}
-                  startIcon={<LogoutIcon />}
-                >
-                  Logout
-                </Button>
-              )}
-            </div>
+      <div className="avatar-container">
+        <Tooltip
+          title="Change Avatar"
+          disableHoverListener={idOfMe !== userId}
+          onClick={(event) => {
+            if (idOfMe === userId) {
+              handleOpenChoosePhoto(event);
+            }
+          }}
+          placement="bottom"
+        >
+          {" "}
+          {avatar && avatar.encode_image ? (
+            <img
+              src={`data:image/jpeg;base64,${avatar.encode_image}`}
+              alt="avatar"
+              className="avatar-image"
+              style={{
+                cursor: idOfMe === userId && "pointer",
+                height: "290px",
+                width: "290px",
+                objectFit: "cover",
+                borderRadius: "50%",
+              }}
+            />
+          ) : (
+            <img
+              src="/images/avatar.jpg"
+              alt="avatar"
+              className="avatar-image"
+              style={{
+                cursor: idOfMe === userId && "pointer",
+                height: "290px",
+                width: "290px",
+                objectFit: "cover",
+                borderRadius: "50%",
+              }}
+            />
           )}
-        </Toolbar>
-      </AppBar>
+        </Tooltip>
+      </div>
       <Dialog open={open} onClose={handleClose} maxWidth={false}>
-        <DialogTitle>Upload Image </DialogTitle>
+        <DialogTitle>Change Avatar </DialogTitle>
         <DialogContent
           sx={{
             padding: "10px",
@@ -232,30 +241,26 @@ function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
               color="primary"
               type="submit"
               style={{ marginLeft: 10 }}
-              onClick={handleUpload}
+              onClick={handleChangeAvatar}
               startIcon={
-                loading ? <CircularProgress size={20} /> : <CloudUploadIcon />
+                loading ? <CircularProgress size={20} /> : <CloudUpload />
               }
               disabled={!file || loading}
             >
-              {loading ? "Uploading..." : "Upload"}
+              {loading ? "Changing..." : "Change"}
             </Button>
           </Box>
         </DialogActions>
       </Dialog>
     </>
   );
-}
+};
 
-export default TopBar;
+export default Avatar;
 
-TopBar.propTypes = {
-  title: PropTypes.string,
-  userName: PropTypes.string,
-  logout: PropTypes.func,
-  isLogin: PropTypes.bool,
-  idOfMe: PropTypes.string,
-  setGetDataPhoto: PropTypes.func,
-  user: PropTypes.object,
+Avatar.propTypes = {
   token: PropTypes.string,
+  idOfMe: PropTypes.string,
+  setLoading: PropTypes.func,
+  loading: PropTypes.bool,
 };

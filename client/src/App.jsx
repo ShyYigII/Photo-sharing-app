@@ -80,7 +80,11 @@ const App = () => {
                 <Route
                   path="/users/:userId"
                   element={
-                    isLogin ? <UserDetail /> : <Navigate to="/loginregister" />
+                    isLogin ? (
+                      <UserDetail token={token} idOfMe={userId} />
+                    ) : (
+                      <Navigate to="/loginregister" />
+                    )
                   }
                 />
 

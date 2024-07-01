@@ -3,14 +3,14 @@ import { Button } from "@mui/material";
 import "./styles.css";
 import Login from "./Login";
 import Register from "./Register";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 function LoginRegister({ login }) {
   const [showRegister, setShowRegister] = useState(false);
 
   return (
     <>
-      {showRegister ? <Register></Register> : <Login login={login}></Login>}
+      {showRegister ? <Register /> : <Login login={login} />}
       <Button
         className="registerButton"
         onClick={() => setShowRegister(!showRegister)}
@@ -23,6 +23,6 @@ function LoginRegister({ login }) {
 
 export default LoginRegister;
 
-LoginRegister.propTypes ={
-	login: PropTypes.func
-}
+LoginRegister.propTypes = {
+  login: PropTypes.func,
+};

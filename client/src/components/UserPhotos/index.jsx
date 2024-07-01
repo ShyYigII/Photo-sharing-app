@@ -64,7 +64,7 @@ function UserPhotos({ userIdMe, isGetDataPhoto, setGetDataPhoto, token }) {
         return { userFirstName: user.first_name, userLastName: user.last_name };
       }
     }
-    return { userFirstName: "", userLastName: "" }; // Trả về giá trị mặc định nếu không tìm thấy
+    return { userFirstName: "", userLastName: "" };
   };
 
   const { userFirstName, userLastName } = getUserInfo(userId);
@@ -89,12 +89,6 @@ function UserPhotos({ userIdMe, isGetDataPhoto, setGetDataPhoto, token }) {
       >
         <CircularProgress />
       </Box>
-    );
-  } else if (photos.length === 0) {
-    return (
-      <Typography variant="body1">
-        User has not uploaded any photo yet
-      </Typography>
     );
   }
 

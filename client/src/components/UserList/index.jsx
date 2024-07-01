@@ -8,6 +8,8 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
+
 function UserList({ isLogin, token }) {
   const [users, setUsers] = useState([]);
 
@@ -87,3 +89,8 @@ function UserList({ isLogin, token }) {
   );
 }
 export default UserList;
+
+UserList.propTypes = {
+  token: PropTypes.string,
+  isLogin: PropTypes.bool,
+};
