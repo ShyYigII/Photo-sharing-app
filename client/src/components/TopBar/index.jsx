@@ -16,6 +16,7 @@ import {
 import HomeIcon from "@mui/icons-material/Home";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import "./styles.css";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -139,7 +140,7 @@ function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
                 onClick={handleGoHomePage}
                 style={{ marginLeft: 10 }}
               >
-                My page{" "}
+                <AccountCircleOutlinedIcon />
               </Button>
               {isLogin && (
                 <Button
@@ -147,9 +148,8 @@ function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
                   variant="contained"
                   type="submit"
                   onClick={handleLogout}
-                  startIcon={<LogoutIcon />}
                 >
-                  Logout
+                  <LogoutIcon />
                 </Button>
               )}
             </div>
