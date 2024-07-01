@@ -48,7 +48,7 @@ router.post(
       });
 
       await newPhoto.save();
-      // fs.unlinkSync(req.file.path);
+      fs.unlinkSync(req.file.path);
 
       console.log("Photo saved to database:", newPhoto.file_name);
 
@@ -125,6 +125,7 @@ router.post(
       });
 
       await newAvatar.save();
+      fs.unlinkSync(req.file.path);
 
       console.log("newAvatar saved to database:", newAvatar.file_name);
 
