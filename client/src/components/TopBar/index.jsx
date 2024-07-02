@@ -89,6 +89,7 @@ function TopBar({ logout, isLogin, idOfMe, setGetDataPhoto, user, token }) {
   const handleClose = () => {
     setOpen(false);
     setFile(null);
+    setLoading(false);
   };
 
   const handleOpenChoosePhoto = () => {
